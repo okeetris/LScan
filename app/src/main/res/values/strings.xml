@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LScan</string>
+    <string name="Welcome"> Welcome to LScan</string>
+    <string name="Scan">Scan Libre</string>
+    <string name="View">My Data </string>
+
+</resources>
