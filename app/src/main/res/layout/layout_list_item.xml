@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- list item layout -->
+<!-- layout parent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <!-- layout child -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Delete button -->
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            style="@android:style/Widget.Button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_delete_black_24dp"
+            android:elevation="0dp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtMemo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/btnDelete"
+        android:layout_toLeftOf="@+id/btnDelete"
+        android:layout_toStartOf="@+id/btnDelete"
+        android:text="Medium Text"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
+
+    <!-- Text view for main text -->
+</LinearLayout>
