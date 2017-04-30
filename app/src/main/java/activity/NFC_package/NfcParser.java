@@ -147,8 +147,5 @@ public class NfcParser  {
         return minutes;
     }
 
-    public double getCR() {
-        return currentReading;
-    }
 
 }

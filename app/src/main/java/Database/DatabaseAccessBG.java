@@ -46,25 +46,25 @@ public class DatabaseAccessBG {
         ContentValues values = new ContentValues();
         values.put("date", bg.getTime());
         values.put("bloodGlucose", bg.getBG());
-        database.insert(DatabaseOpenHelper.TABLE, null, values);
+        database.insert(DatabaseOpenHelperBG.TABLE, null, values);
     }
 
     public void update(BloodGlucoseModel bg) {
         ContentValues values = new ContentValues();
         values.put("date", new Date().getTime());
-        values.put("memo", bg.getBG());
+        values.put("bloodGlucose", bg.getBG());
         String date = Long.toString(bg.getTime());
-        database.update(DatabaseOpenHelper.TABLE, values, "date = ?", new String[]{date});
+        database.update(DatabaseOpenHelperBG.TABLE, values, "date = ?", new String[]{date});
     }
 
     public void delete(BloodGlucoseModel bg) {
         String date = Long.toString(bg.getTime());
-        database.delete(DatabaseOpenHelper.TABLE, "date = ?", new String[]{date});
+        database.delete(DatabaseOpenHelperBG.TABLE, "date = ?", new String[]{date});
     }
 
     public List getAllMemos() {
         List bgs = new ArrayList<>();
-        Cursor cursor = database.rawQuery("SELECT * From memo ORDER BY date DESC", null);
+        Cursor cursor = database.rawQuery("SELECT * From BG ORDER BY date DESC", null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             long time = cursor.getLong(0);

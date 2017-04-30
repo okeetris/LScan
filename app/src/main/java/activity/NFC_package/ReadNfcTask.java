@@ -6,13 +6,17 @@ package activity.NFC_package;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.t788340.lscan.R;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -31,6 +35,7 @@ public class ReadNfcTask extends AsyncTask<Tag, Boolean, String> {
     private NfcParser parser;
     private DatabaseAccessBG databaseAccess;
     private Context mContext;
+    private static double currentBG;
 
     public ReadNfcTask(Activity a, Context context) {
         mContext = context;
@@ -170,14 +175,24 @@ public class ReadNfcTask extends AsyncTask<Tag, Boolean, String> {
         DatabaseAccessBG databaseAccess = DatabaseAccessBG.getInstance(mContext);
         databaseAccess.open();
         BloodGlucoseModel temp = new BloodGlucoseModel();
-        temp.setBG(parser.parseNfc(success));
+        currentBG = parser.parseNfc(success);
+        temp.setBG(currentBG);
         databaseAccess.save(temp);
         Toast.makeText(mContext, " Blood Glucose Saved", Toast.LENGTH_LONG).show();
         databaseAccess.close();
-        //this.Finish();
+        Update(currentBG);
     }
 
     @Override
     protected void onCancelled() {
+    }
+
+    public static double getCurrentBG(){
+        return currentBG;
+    }
+
+    private void Update(Double BG){
+        TextView currentBG = (TextView) ((MainMenu_Activity)mContext).findViewById(R.id.currentBG);
+        currentBG.setText(Double.toString(BG));
     }
 }

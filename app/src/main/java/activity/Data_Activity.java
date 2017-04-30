@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import Database.DatabaseAccess;
+import mainMenu.MainMenu_Activity;
 import model.Memo;
 
 import com.example.t788340.lscan.R;
@@ -73,7 +74,7 @@ public class Data_Activity extends Activity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Data_Activity.this, Abbott.class));
+                startActivity(new Intent(Data_Activity.this, MainMenu_Activity.class));
             }
         });
 

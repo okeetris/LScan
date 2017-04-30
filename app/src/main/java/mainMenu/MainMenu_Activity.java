@@ -9,51 +9,39 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.t788340.lscan.R;
-//import com.example.kbb12.dms.individualScreens.mainMenu.controller.AddActivityLauncher;
-//import com.example.kbb12.dms.individualScreens.mainMenu.controller.MealPlannerLauncher;
-//import com.example.kbb12.dms.individualScreens.mainMenu.controller.TakeInsulinLauncher;
-import java.util.Calendar;
 import java.util.List;
 
 import Database.DatabaseAccessBG;
-import Database.bloodGlucoseRecord.BGReading;
-import activity.NFC_package.NfcParser;
+import activity.Data_Activity;
 import activity.NFC_package.ReadNfcTask;
 import model.BloodGlucoseModel;
-import model.MainMenuReadWriteModel;
-import mainMenu.GraphFragment;
-import model.ModelObserver;
-import Database.DatabaseAccessBG;
-import model.BloodGlucoseModel;
-//import com.example.kbb12.dms.individualScreens.takeInsulin.TakeInsulin;
-
-//import com.example.kbb12.dms.model.bluetooth.BluetoothService;
 
 
-public class MainMenu_Activity extends AppCompatActivity {
+public class MainMenu_Activity extends Activity {
 
 
     private NfcAdapter mAdapter;
     private static final String TAG = "MainMenuActivity";
-    private GraphFragment fragment;
-    private MainMenuReadWriteModel model;
     private DatabaseAccessBG databaseAccess;
     private ListView BGList;
     private List<BloodGlucoseModel> BGs;
+    private TextView currentBG;
+    private ImageButton food_button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +49,22 @@ public class MainMenu_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         this.databaseAccess = DatabaseAccessBG.getInstance(this);
         this.BGList = (ListView) findViewById(R.id.BGList);
-        //ImageButton takeInsulinButton = (ImageButton) findViewById(R.id.takeInsulinButton);
-        //takeInsulinButton.setOnClickListener(new TakeInsulinLauncher(this));
-        //ModelHolder.model.logModels();
-        //if(getIntent().getBooleanExtra("NotificationLaunch",false)){
-         //   Intent nextIntent = new Intent(this, TakeInsulin.class);
-        //    startActivity(nextIntent);
-        //}
+        this.currentBG = (TextView) findViewById(R.id.currentBG);
+        this.food_button = (ImageButton) findViewById(R.id.food_button);
         mAdapter = NfcAdapter.getDefaultAdapter(this);
+
+
+        food_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainMenu_Activity.this, Data_Activity.class));
+            }
+           /*@Override
+            public void onClick(View v) {
+                onAddClicked();
+            }
+            */
+        });
     }
 
     @Override
@@ -79,57 +75,6 @@ public class MainMenu_Activity extends AppCompatActivity {
         databaseAccess.close();
         BGAdapter adapter = new BGAdapter(this, BGs);
         this.BGList.setAdapter(adapter);
-
-        fragment = new GraphFragment();
-        model = new MainMenuReadWriteModel() {
-            @Override
-            public void addRawData(Calendar c, String data) {
-
-            }
-
-            @Override
-            public void addHistoryReading(Calendar c, double reading) {
-
-            }
-
-            @Override
-            public void addCurrentReading(Calendar c, double reading) {
-
-            }
-
-            @Override
-            public BGReading getMostRecentHistoryReading() {
-                return null;
-            }
-
-            @Override
-            public void setError(String errorMessage) {
-
-            }
-
-            @Override
-            public void registerObserver(ModelObserver observer) {
-
-            }
-
-            @Override
-            public List<BGReading> getHistoryBetween(Calendar from, Calendar to) {
-                return null;
-            }
-
-            @Override
-            public String getError() {
-                return null;
-            }
-        };
-        model.registerObserver(fragment);
-        fragment.setModel(model);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.imageView, fragment);
-        ft.commit();
-
-
         setupForegroundDispatch(this, mAdapter);
     }
 
@@ -137,7 +82,6 @@ public class MainMenu_Activity extends AppCompatActivity {
         databaseAccess.open();
         databaseAccess.delete(BG);
         databaseAccess.close();
-
         ArrayAdapter<BloodGlucoseModel> adapter = (ArrayAdapter<BloodGlucoseModel>) BGList.getAdapter();
         adapter.remove(BG);
         adapter.notifyDataSetChanged();
@@ -145,11 +89,9 @@ public class MainMenu_Activity extends AppCompatActivity {
     //set private class for memo adapter
     private class BGAdapter extends ArrayAdapter<BloodGlucoseModel> {
 
-
         public BGAdapter(Context context, List<BloodGlucoseModel> objects) {
             super(context, 0, objects);
         }
-
         //inflate view layout_list_item
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -210,7 +152,7 @@ public class MainMenu_Activity extends AppCompatActivity {
         filters[0].addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
         filters[0].addCategory(Intent.CATEGORY_DEFAULT);
 
-        //adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
+        adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
 
     @Override
@@ -226,8 +168,6 @@ public class MainMenu_Activity extends AppCompatActivity {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             ReadNfcTask readNfcTask = new ReadNfcTask(this, this);
             readNfcTask.execute(tag);
-
         }
-
     }
 }

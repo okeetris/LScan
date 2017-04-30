@@ -11,6 +11,7 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="Current_BG">Current Blood Glucose=</string>
 
     <string name="sensor_current_time">Sensor current time</string>
     <string name="sensor_start_time">Sensor start time</string>

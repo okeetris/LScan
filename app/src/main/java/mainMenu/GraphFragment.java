@@ -39,7 +39,7 @@ public class GraphFragment extends Fragment implements ModelObserver {
     private MainMenuReadModel model;
     private SimpleDateFormat form;
     List<BGReading> list;
-    @Nullable
+    /*@Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.chart_fragment, container, false);
@@ -59,7 +59,7 @@ public class GraphFragment extends Fragment implements ModelObserver {
             }
         };
         list = model.getHistoryBetween(then, now);
-        Log.d("GRAPHING", list.size() + "");
+       // Log.d("GRAPHING", list.size() + "");
         if(list.size()>0) {
             mChart = (LineChart) v.findViewById(R.id.chart1);
             mChart.getDescription().setEnabled(false);
@@ -108,7 +108,7 @@ public class GraphFragment extends Fragment implements ModelObserver {
         }
         return entries;
     }
-
+    */
     @Override
     public void update() {
         Calendar now = Calendar.getInstance();
@@ -140,7 +140,7 @@ public class GraphFragment extends Fragment implements ModelObserver {
                     return form.format(list.get((int) (list.size() -(value+1))).getTime().getTime());
                 }
             });
-            LineDataSet bds = new LineDataSet(populateChart(), "");
+            /*LineDataSet bds = new LineDataSet(populateChart(), "");
             bds.setLineWidth(4.0f);
             bds.setValueTextSize(0f);
             bds.setCubicIntensity(3f);
@@ -149,6 +149,7 @@ public class GraphFragment extends Fragment implements ModelObserver {
             mChart.setData(new LineData(bds));
             mChart.notifyDataSetChanged();
             mChart.invalidate();
+            */
         }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,20 +12,52 @@
     android:weightSum="4"
     tools:context="mainMenu.MainMenu_Activity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_weight="2"
+    <TextView
+        android:id="@+id/CurrentBG_statement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/linearLayout2">
+        android:text="@string/Current_BG"
+        android:textSize="24sp" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/graph_placeholder"
-            android:id="@+id/imageView"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/currentBG"
+        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/CurrentBG_statement"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_toEndOf="@+id/CurrentBG_statement"
+        android:layout_toRightOf="@+id/CurrentBG_statement"
+        app:srcCompat="@drawable/unit_mmoll" />
+
+    <View
+        android:id="@+id/strut"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/imageView"/>
+
+    <ListView
+        android:id="@+id/BGList"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:layout_above="@+id/linearLayout3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/strut" />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +80,7 @@
                 android:text="New Button" />
 
             <ImageButton
-                android:id="@+id/meal_planner_button"
+                android:id="@+id/food_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
@@ -58,14 +91,5 @@
                 android:src="@drawable/add_meal_icon"
                 android:text="New Button" />
         </LinearLayout>
-
-    <ListView
-        android:id="@+id/BGList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_above="@+id/linearLayout3" />
 
 </RelativeLayout>
