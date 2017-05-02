@@ -9,20 +9,17 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
 import android.os.Bundle;
-
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.t788340.lscan.R;
+
 import java.util.List;
 
 import Database.DatabaseAccessBG;
@@ -31,11 +28,14 @@ import activity.NFC_package.ReadNfcTask;
 import model.BloodGlucoseModel;
 
 
+/**
+ * The type Main menu activity.
+ */
 public class MainMenu_Activity extends Activity {
 
 
-    private NfcAdapter mAdapter;
     private static final String TAG = "MainMenuActivity";
+    private NfcAdapter mAdapter;
     private DatabaseAccessBG databaseAccess;
     private ListView BGList;
     private List<BloodGlucoseModel> BGs;
@@ -71,13 +71,19 @@ public class MainMenu_Activity extends Activity {
     public void onResume() {
         super.onResume();
         databaseAccess.open();
-        this.BGs = databaseAccess.getAllMemos();
+        this.BGs = databaseAccess.getAllBGs();
+        Log.d(TAG, "onResume: " + BGs);
         databaseAccess.close();
         BGAdapter adapter = new BGAdapter(this, BGs);
         this.BGList.setAdapter(adapter);
         setupForegroundDispatch(this, mAdapter);
     }
 
+    /**
+     * On delete clicked.
+     *
+     * @param BG the bg
+     */
     public void onDeleteClicked(BloodGlucoseModel BG) {
         databaseAccess.open();
         databaseAccess.delete(BG);
@@ -85,37 +91,6 @@ public class MainMenu_Activity extends Activity {
         ArrayAdapter<BloodGlucoseModel> adapter = (ArrayAdapter<BloodGlucoseModel>) BGList.getAdapter();
         adapter.remove(BG);
         adapter.notifyDataSetChanged();
-    }
-    //set private class for memo adapter
-    private class BGAdapter extends ArrayAdapter<BloodGlucoseModel> {
-
-        public BGAdapter(Context context, List<BloodGlucoseModel> objects) {
-            super(context, 0, objects);
-        }
-        //inflate view layout_list_item
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.layout_list_item, parent, false);
-            }
-            //link buttons to views within layout_list_item
-            Button btnDelete = (Button) convertView.findViewById(R.id.btnDelete);
-            TextView txtMemo = (TextView) convertView.findViewById(R.id.txtMemo);
-            TextView time = (TextView) convertView.findViewById(R.id.time);
-
-            final BloodGlucoseModel BG = BGs.get(position);
-            time.setText(BG.getDate());
-            String BGText = Double.toString(BG.getBG());
-            txtMemo.setText(BGText);
-
-            //set listener for delete button
-            btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onDeleteClicked(BG);}
-            });
-            return convertView;
-        }
     }
 
     @Override
@@ -161,13 +136,52 @@ public class MainMenu_Activity extends Activity {
     }
 
     private void handleIntent(Intent intent) {
-        //ToDo: Read NFC in another task
         String action = intent.getAction();
         Log.d(TAG, "Tech Discovered");
         if (intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             ReadNfcTask readNfcTask = new ReadNfcTask(this, this);
             readNfcTask.execute(tag);
+        }
+    }
+
+    //set private class for memo adapter
+    private class BGAdapter extends ArrayAdapter<BloodGlucoseModel> {
+
+        /**
+         * Instantiates a new Bg adapter.
+         *
+         * @param context the context
+         * @param objects the objects
+         */
+        public BGAdapter(Context context, List<BloodGlucoseModel> objects) {
+            super(context, 0, objects);
+        }
+
+        //inflate view layout_list_item
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.layout_list_item, parent, false);
+            }
+            //link buttons to views within layout_list_item
+            Button btnDelete = (Button) convertView.findViewById(R.id.btnDelete);
+            TextView txtMemo = (TextView) convertView.findViewById(R.id.txtMemo);
+            TextView time = (TextView) convertView.findViewById(R.id.time);
+
+            final BloodGlucoseModel BG = BGs.get(position);
+            time.setText(BG.getDate());
+            String BGText = Double.toString(BG.getBG());
+            txtMemo.setText(BGText);
+
+            //set listener for delete button
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDeleteClicked(BG);
+                }
+            });
+            return convertView;
         }
     }
 }

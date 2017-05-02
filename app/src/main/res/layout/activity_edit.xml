@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--Layout for the edit view -->
-<!-- parent layout -->
+<?xml version="1.0" encoding="utf-8"?><!--Layout for the edit view --><!-- parent layout -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,32 +21,32 @@
         <!-- save button -->
         <Button
             android:id="@+id/btnSave"
+            style="@android:style/ButtonBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/save"
-            style="@android:style/ButtonBar" />
+            android:text="@string/save" />
 
         <!-- cancel button -->
         <Button
             android:id="@+id/btnCancel"
+            style="@android:style/ButtonBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/cancel"
-            style="@android:style/ButtonBar" />
+            android:text="@string/cancel" />
     </LinearLayout>
 
     <!-- scroll view for memo's -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true">
 
         <!-- text view for within scroll view -->
         <EditText

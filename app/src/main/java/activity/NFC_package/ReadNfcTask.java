@@ -6,7 +6,6 @@ package activity.NFC_package;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
 import android.os.AsyncTask;
@@ -26,7 +25,9 @@ import mainMenu.MainMenu_Activity;
 import model.BloodGlucoseModel;
 
 
-
+/**
+ * The type Read nfc task.
+ */
 public class ReadNfcTask extends AsyncTask<Tag, Boolean, String> {
 
 
@@ -37,6 +38,12 @@ public class ReadNfcTask extends AsyncTask<Tag, Boolean, String> {
     private Context mContext;
     private static double currentBG;
 
+    /**
+     * Instantiates a new Read nfc task.
+     *
+     * @param a       the a
+     * @param context the context
+     */
     public ReadNfcTask(Activity a, Context context) {
         mContext = context;
         activity = a;
@@ -44,8 +51,17 @@ public class ReadNfcTask extends AsyncTask<Tag, Boolean, String> {
     }
 
 
+    /**
+     * The Hex array.
+     */
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
+    /**
+     * Bytes to hex string.
+     *
+     * @param bytes the bytes
+     * @return the string
+     */
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
@@ -187,6 +203,11 @@ public class ReadNfcTask extends AsyncTask<Tag, Boolean, String> {
     protected void onCancelled() {
     }
 
+    /**
+     * Get current bg double.
+     *
+     * @return the double
+     */
     public static double getCurrentBG(){
         return currentBG;
     }

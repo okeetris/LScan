@@ -14,12 +14,16 @@ import com.example.t788340.lscan.R;
 /**
  * Created by 788340 on 25/03/2017.
  */
-
 public class SimpleEula {
 
     private String EULA_PREFIX = "eula_";
     private Activity mActivity;
 
+    /**
+     * Instantiates a new Simple eula.
+     *
+     * @param context the context
+     */
     public SimpleEula(Activity context) {
         mActivity = context;
     }
@@ -34,6 +38,9 @@ public class SimpleEula {
         return pi;
     }
 
+    /**
+     * Show.
+     */
     public void show() {
         PackageInfo versionInfo = getPackageInfo();
 

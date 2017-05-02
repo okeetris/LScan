@@ -4,10 +4,8 @@ package activity;
  * Created by 788340 on 30/04/2017.
  */
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +15,9 @@ import com.example.t788340.lscan.R;
 import Database.DatabaseAccessBG;
 import model.BloodGlucoseModel;
 
+/**
+ * The type Edit bg activity.
+ */
 public class EditBGActivity extends ActionBarActivity {
     private EditText etText;
     private Button btnSave;
@@ -56,6 +57,9 @@ public class EditBGActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * On save clicked.
+     */
     public void onSaveClicked() {
         DatabaseAccessBG databaseAccess = DatabaseAccessBG.getInstance(this);
         databaseAccess.open();
@@ -66,6 +70,9 @@ public class EditBGActivity extends ActionBarActivity {
         this.finish();
     }
 
+    /**
+     * On cancel clicked.
+     */
     public void onCancelClicked() {
         this.finish();
     }

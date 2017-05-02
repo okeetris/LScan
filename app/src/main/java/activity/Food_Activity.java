@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,6 +17,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.t788340.lscan.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,28 +29,39 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.example.t788340.lscan.R;
 import Database.DatabaseAccess;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import model.BloodGlucoseModel;
 import model.Memo;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * The type Food activity.
+ */
 public class Food_Activity extends Activity {
 
+    /**
+     * The Edit text.
+     */
     EditText editText;
+    /**
+     * The Progress bar.
+     */
     ProgressBar progressBar;
     private ListView responseView;
     private Button btnSave;
     private Button btnCancel;
+    /**
+     * The constant final1.
+     */
     public static String final1;
     private String[] all1 = {};
+    /**
+     * The Food.
+     */
     String food;
+    /**
+     * The Regex.
+     */
     String regex = "[a-zA-Z]\\w*";
     private Memo memo;
 
@@ -78,6 +95,9 @@ public class Food_Activity extends Activity {
         });
     }
 
+    /**
+     * On search clicked.
+     */
     public void onSearchClicked(){
 
         String search = editText.getText().toString();
@@ -115,7 +135,11 @@ public class Food_Activity extends Activity {
         }
 
     }
-    //method for when save is clicked
+
+    /**
+     * On save clicked.
+     */
+//method for when save is clicked
     public void onSaveClicked() {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
@@ -129,9 +153,21 @@ public class Food_Activity extends Activity {
 
     private class RetrieveFeedTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * The Api key.
+         */
         static final String API_KEY = "7f9d6201c30e7f71fa27aa1249478478";
+        /**
+         * The Api id.
+         */
         static final String API_ID = "9b2f1e3e";
+        /**
+         * The Api url.
+         */
         static final String API_URL = "https://api.nutritionix.com/v1_1/search/";
+        /**
+         * The Api fields.
+         */
         static final String API_FIELDS = "?results=0:20&fields=item_name,item_id,brand_name,nf_total_carbohydrate";
 
 
@@ -208,7 +244,7 @@ public class Food_Activity extends Activity {
 
             ArrayAdapter adapter = new ArrayAdapter(Food_Activity.this, android.R.layout.simple_list_item_single_choice, all1);
             responseView.setAdapter(adapter);
-            responseView.setChoiceMode(responseView.CHOICE_MODE_MULTIPLE);
+            responseView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
             responseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

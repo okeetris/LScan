@@ -11,11 +11,21 @@
     tools:context="activity.Data_Activity">
 
     <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="200dip"
-        android:id="@+id/graph"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/graph_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/graph"
+        android:layout_marginTop="11dp"
+        android:text="Refresh" />
 
     <ListView
         android:id="@+id/listView"
@@ -26,7 +36,8 @@
         android:layout_alignParentStart="true"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        android:layout_below="@+id/graph_button" />
 
     <RelativeLayout
         android:id="@+id/layoutBottom"
@@ -36,29 +47,30 @@
         android:layout_centerHorizontal="true"
         android:padding="5dp">
 
-        <View android:id="@+id/strut"
+        <View
+            android:id="@+id/strut"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
         <!-- add button -->
         <Button
             android:id="@+id/btnAdd"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="0dp"
-            android:layout_alignRight="@id/strut"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="@string/add"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            android:layout_alignRight="@id/strut"
+            android:text="@string/add" />
 
 
         <Button
             android:id="@+id/btnScan"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/strut"
             android:layout_alignParentRight="true"
-            android:text="@string/Scan"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:text="@string/Scan" />
         <!-- custom view for banner -->
         <View
             android:layout_width="match_parent"

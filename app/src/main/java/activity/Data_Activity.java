@@ -3,60 +3,73 @@ package activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import Database.DatabaseAccess;
-import mainMenu.MainMenu_Activity;
-import model.Memo;
-
 import com.example.t788340.lscan.R;
-
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import Database.DatabaseAccess;
+import Database.DatabaseAccessBG;
+import Database.DatabaseOpenHelperBG;
+import mainMenu.MainMenu_Activity;
+import model.BloodGlucoseModel;
+import model.Memo;
+
+
+/**
+ * The type Data activity.
+ */
 public class Data_Activity extends Activity {
 
+    private static final String TAG = "Data_Activity";
+    /**
+     * The Graph.
+     */
+    GraphView graph;
+    /**
+     * The Series.
+     */
+    LineGraphSeries<DataPoint> series;
     private Button btnAdd;
     private Button btnScan;
+    private Button graph_button;
     private ListView listView;
     private DatabaseAccess databaseAccess;
+    private DatabaseAccessBG databaseAccessBG;
+    private DatabaseAccessBG databaseAccessBG1;
     private List<Memo> memos;
+    private List<BloodGlucoseModel> BGs;
+    private SQLiteDatabase sqliteDatabase;
+    private DatabaseOpenHelperBG openHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Link View
         setContentView(R.layout.activity_data_);
-
         this.btnAdd = (Button) findViewById(R.id.btnAdd);
         this.btnScan = (Button) findViewById(R.id.btnScan);
         this.listView = (ListView) findViewById(R.id.listView);
-
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        graph.addSeries(series);
-        //GraphView.setTitle("foo");
-        graph.getViewport().setScrollable(true); // enables horizontal scrolling
-        graph.getViewport().setScrollableY(true); // enables vertical scrolling
-        graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
-        graph.getViewport().setScalableY(true); // enables vertical zooming and scrolling
+        this.graph = (GraphView) findViewById(R.id.graph);
+        this.graph_button = (Button) findViewById(R.id.graph_button);
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +91,15 @@ public class Data_Activity extends Activity {
             }
         });
 
+        graph_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateGraph();
+            }
+        });
         //set database access
         this.databaseAccess = DatabaseAccess.getInstance(this);
+        this.databaseAccessBG = DatabaseAccessBG.getInstance(this);
         //link list view and button to views
         this.listView = (ListView) findViewById(R.id.listView);
         //add listener for button
@@ -108,6 +128,33 @@ public class Data_Activity extends Activity {
 
     }
 
+    private void updateGraph() {
+        //DataPoint[] dp = new DataPoint[databaseAccessBG.getData()];
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        Log.d(TAG, "updateGraph: " + d1);
+        calendar.add(Calendar.DATE, 2);
+        Date d2 = calendar.getTime();
+        Log.d(TAG, "updateGraph: " + d2);
+        calendar.add(Calendar.DATE, 3);
+        Date d3 = calendar.getTime();
+        Log.d(TAG, "updateGraph: " + d3);
+
+        //databaseAccessBG1 = new DatabaseAccessBG(this);
+        //sqliteDatabase=openHelper.getReadableDatabase();
+        //String [] columns ={"date", "bloodglucose"};
+        //Cursor cursor = sqliteDatabase.query("BG", columns, null, null, null, null, null, null);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
+                new DataPoint(d1, 1),
+                new DataPoint(d2, 5),
+                new DataPoint(d3, 3)
+        });
+        graph.addSeries(series);
+
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
+    }
+
 
     //set onResume
     @Override
@@ -118,9 +165,16 @@ public class Data_Activity extends Activity {
         databaseAccess.close();
         MemoAdapter adapter = new MemoAdapter(this, memos);
         this.listView.setAdapter(adapter);
+
+
     }
 
-    //Set on delete clicked button
+    /**
+     * On delete clicked.
+     *
+     * @param memo the memo
+     */
+//Set on delete clicked button
     public void onDeleteClicked(Memo memo) {
         databaseAccess.open();
         databaseAccess.delete(memo);
@@ -135,38 +189,71 @@ public class Data_Activity extends Activity {
     private class MemoAdapter extends ArrayAdapter<Memo> {
 
 
-    public MemoAdapter(Context context, List<Memo> objects) {
-        super(context, 0, objects);
-    }
-
-    //inflate view layout_list_item
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = getLayoutInflater().inflate(R.layout.layout_list_item, parent, false);
+        /**
+         * Instantiates a new Memo adapter.
+         *
+         * @param context the context
+         * @param objects the objects
+         */
+        public MemoAdapter(Context context, List<Memo> objects) {
+            super(context, 0, objects);
         }
-        //link buttons to views within layout_list_item
-        Button btnDelete = (Button) convertView.findViewById(R.id.btnDelete);
-        TextView txtMemo = (TextView) convertView.findViewById(R.id.txtMemo);
-        TextView time = (TextView) convertView.findViewById(R.id.time);
 
-        final Memo memo = memos.get(position);
-        memo.setFullDisplayed(false);
-        time.setText(memo.getDate());
-        txtMemo.setText(memo.getText());
+        //inflate view layout_list_item
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.layout_list_item, parent, false);
+            }
+            //link buttons to views within layout_list_item
+            Button btnDelete = (Button) convertView.findViewById(R.id.btnDelete);
+            TextView txtMemo = (TextView) convertView.findViewById(R.id.txtMemo);
+            TextView time = (TextView) convertView.findViewById(R.id.time);
+
+            final Memo memo = memos.get(position);
+            memo.setFullDisplayed(false);
+            time.setText(memo.getDate());
+            txtMemo.setText(memo.getText());
 
 
-
-
-        //set listener for delete button
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onDeleteClicked(memo);}
-        });
-        return convertView;
+            //set listener for delete button
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDeleteClicked(memo);
+                }
+            });
+            return convertView;
+        }
     }
-}
+
+    /**
+     * Get data data point [ ].
+     *
+     * @return the data point [ ]
+     */
+    public DataPoint[] getData() {
+        //read data from database
+        //this.BGs = databaseAccessBG.getAllBGs();
+
+        sqliteDatabase=openHelper.getReadableDatabase();
+        String [] columns ={"date", "bloodglucose"};
+        Cursor cursor = sqliteDatabase.query("BG", columns, null, null, null, null, null, null);
+        DataPoint[] dp = new DataPoint[cursor.getCount()];
+        //cursor.moveToFirst();
+
+        for (int i = 0; i < cursor.getCount(); i++) {
+            //final BloodGlucoseModel BG = BGs.get(i);
+            Long time = (cursor.getLong(0));
+            cursor.moveToNext();
+
+            dp[i] = new DataPoint(time, cursor.getInt(1));
+            //Log.d(TAG, "getData: " + time);
+        }
+        return dp;
+    }
+
+
 }
 
 

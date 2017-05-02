@@ -8,19 +8,20 @@ package activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.t788340.lscan.R;
+
 import Database.DatabaseAccess;
 import model.Memo;
 
-import com.example.t788340.lscan.R;
-
 //import database access
 
+/**
+ * The type Edit memo activity.
+ */
 //create class EditMemoActivity
 public class EditMemoActivity extends Activity {
     //Set variables
@@ -29,6 +30,9 @@ public class EditMemoActivity extends Activity {
     private Button btnCancel;
     private Memo memo;
     private EditText Flag;
+    /**
+     * The Value.
+     */
     int value;
 
     //set onCreate foe EditMemoActivity
@@ -65,7 +69,11 @@ public class EditMemoActivity extends Activity {
             }
         });
     }
-    //method for when save is clicked
+
+    /**
+     * On save clicked.
+     */
+//method for when save is clicked
     public void onSaveClicked() {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
@@ -82,7 +90,11 @@ public class EditMemoActivity extends Activity {
         databaseAccess.close();
         this.finish();
     }
-    //set end for when cancel is pressed.
+
+    /**
+     * On cancel clicked.
+     */
+//set end for when cancel is pressed.
     public void onCancelClicked() {
         this.finish();
     }

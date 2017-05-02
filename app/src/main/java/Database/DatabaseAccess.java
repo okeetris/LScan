@@ -9,14 +9,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-//import memo class
-import model.Memo;
-
-//import utility's
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.Memo;
+
+
+/**
+ * The type Database access.
+ */
 //create database access class
 public class DatabaseAccess {
     //set variables
@@ -28,31 +30,57 @@ public class DatabaseAccess {
         this.openHelper = new DatabaseOpenHelper(context);
     }
 
-    //set a get instance method
+    /**
+     * Gets instance.
+     *
+     * @param context the context
+     * @return the instance
+     */
+//set a get instance method
     public static synchronized DatabaseAccess getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseAccess(context);
         }
         return instance;
     }
-    //set method for opening database
+
+    /**
+     * Open.
+     */
+//set method for opening database
     public void open() {
         this.database = openHelper.getWritableDatabase();
     }
-    //set method for closing database
+
+    /**
+     * Close.
+     */
+//set method for closing database
     public void close() {
         if (database != null) {
             this.database.close();
         }
     }
-    //set method for saving a memo
+
+    /**
+     * Save.
+     *
+     * @param memo the memo
+     */
+//set method for saving a memo
     public void save(Memo memo) {
         ContentValues values = new ContentValues();
         values.put("date", memo.getTime());
         values.put("memo", memo.getText());
         database.insert(DatabaseOpenHelper.TABLE, null, values);
     }
-    // set method for updating method
+
+    /**
+     * Update.
+     *
+     * @param memo the memo
+     */
+// set method for updating method
     public void update(Memo memo) {
         ContentValues values = new ContentValues();
         values.put("date", new Date().getTime());
@@ -60,12 +88,24 @@ public class DatabaseAccess {
         String date = Long.toString(memo.getTime());
         database.update(DatabaseOpenHelper.TABLE, values, "date = ?", new String[]{date});
     }
-    //set method for deleting from database
+
+    /**
+     * Delete.
+     *
+     * @param memo the memo
+     */
+//set method for deleting from database
     public void delete(Memo memo) {
         String date = Long.toString(memo.getTime());
         database.delete(DatabaseOpenHelper.TABLE, "date = ?", new String[]{date});
     }
-    //set method for returning all memos in database
+
+    /**
+     * Gets all memos.
+     *
+     * @return the all memos
+     */
+//set method for returning all memos in database
     public List getAllMemos() {
         List memos = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * From memo ORDER BY date DESC", null);

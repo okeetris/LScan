@@ -9,13 +9,30 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * The type Database open helper.
+ */
 //start database open helper class
 class DatabaseOpenHelper extends SQLiteOpenHelper {
-    //set variables
+    /**
+     * The constant DATABASE.
+     */
+//set variables
     public static final String DATABASE = "memos.db";
+    /**
+     * The constant TABLE.
+     */
     public static final String TABLE = "memo";
+    /**
+     * The constant VERSION.
+     */
     public static final int VERSION = 1;
 
+    /**
+     * Instantiates a new Database open helper.
+     *
+     * @param context the context
+     */
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE, null, VERSION);
     }
