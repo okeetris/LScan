@@ -15,6 +15,7 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.t788340.lscan.R;
@@ -50,6 +51,8 @@ public class Food_Activity extends Activity {
     private ListView responseView;
     private Button btnSave;
     private Button btnCancel;
+    private Button search_button;
+    private TextView nutritionx;
     /**
      * The constant final1.
      */
@@ -76,6 +79,8 @@ public class Food_Activity extends Activity {
         this.responseView = (ListView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.editText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        search_button = (Button) findViewById(R.id.search_button);
+        this.nutritionx = (TextView) findViewById(R.id.nutritionx);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +88,7 @@ public class Food_Activity extends Activity {
                 startActivity(new Intent(Food_Activity.this, Data_Activity.class));
             }
         });
-        Button search_button = (Button) findViewById(R.id.search_button);
+
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +96,8 @@ public class Food_Activity extends Activity {
                 ((InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE))
                         .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                 onSearchClicked();
+                //nutritionx.setVisibility(View.GONE);
+
             }
         });
     }
